@@ -1,0 +1,4 @@
+apiVersion: v2
+name: key-server
+description: A Helm chart for deploying the key-server application
+version: 0.1.0

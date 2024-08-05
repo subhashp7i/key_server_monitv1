@@ -1,0 +1,42 @@
+# for helm controller CRD present in k3s , declarative way
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: key-server
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: key-server
+  namespace: kube-system
+spec:
+  targetNamespace: key-server
+  chart: key-server-0.1.0.tgz. # probably needs repo syntax format
+  repo: ""
+  set:
+    image.repository: "localhost:5000/key-server"
+    image.tag: "latest"
+    replicaCount: 1
+    service.type: ClusterIP
+    maxSize: 1024        # Set the maximum key size
+    srvPort: 1123        # Set the server port
+  valuesContent: |-
+    livenessProbe:
+      httpGet:
+        path: /key/1024
+        port: 1123
+      initialDelaySeconds: 10
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+
+    readinessProbe:
+      httpGet:
+        path: /metrics
+        port: 1123
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1

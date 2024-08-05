@@ -1,0 +1,41 @@
+replicaCount: 4
+
+image:
+  repository: localhost:5000/key-server
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 1123
+
+maxSize: 1024   # Default maximum key size
+srvPort: 1123   # Default server port
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  limits:
+    memory: "128Mi"
+    cpu: "200m"
+
+livenessProbe:
+  httpGet:
+    path: /key/1024     # Liveness probe using the key generation endpoint
+    port: 1123
+  initialDelaySeconds: 10
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /metrics      # Readiness probe using the metrics endpoint
+    port: 1123
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
