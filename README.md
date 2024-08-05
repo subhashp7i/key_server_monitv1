@@ -553,4 +553,4 @@ As you can see in the above  /metrics endpoint http_status_codes{code="400"} is 
 6. Configure HPA horizontal pod autoscaler feature in kubernetes for the deployment to have flexibility of upscaling and downscaling keeping infra costs in mind when the server is idle for too long.
 ```
 
-Used claude to generate this markdown from google doc. :)
+Thank you claude for converting google doc to markdown with less effort :)
